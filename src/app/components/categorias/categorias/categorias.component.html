@@ -1,0 +1,25 @@
+<div class="categorias-container">
+  <h2>📂 Categorías</h2>
+
+  <form (ngSubmit)="agregarCategoria()" class="categoria-form">
+    <input
+      type="text"
+      [(ngModel)]="nuevaCategoria"
+      name="categoria"
+      placeholder="Nueva categoría"
+      required
+    />
+    <button type="submit">Agregar</button>
+  </form>
+
+  <div *ngIf="mensaje" class="mensaje">
+    {{ mensaje }}
+  </div>
+
+  <ul class="lista-categorias">
+    <li *ngFor="let cat of categorias$ | async">
+      {{ cat.nombre }}
+      <button (click)="eliminarCategoria(cat.id!)">❌</button>
+    </li>
+  </ul>
+</div>

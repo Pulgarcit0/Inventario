@@ -1,0 +1,60 @@
+.navbar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  padding: 1rem 2rem;
+  margin: 1rem auto;
+  border-radius: 12px;
+  background: linear-gradient(to right, #1c1f2b, #0a36d6);
+  box-shadow: 0 4px 20px rgba(188, 40, 40, 0.5);
+  border: 1px solid rgba(186, 28, 28, 0.05);
+  width: fit-content;
+}
+
+.navbar a {
+  color: #00ffff; /* cian neón */
+  text-decoration: none;
+  font-size: 1.1rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  position: relative;
+  font-weight: 500;
+}
+
+.navbar a:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff; /* blanco al hacer hover */
+}
+
+.navbar a.active {
+  color: #00ffff; /* cian también cuando está activo */
+  font-weight: 600;
+}
+
+/* Eliminado el subrayado del enlace activo */
+/*
+.navbar a.active::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 30%;
+  width: 40%;
+  height: 2px;
+  background-color: #00ffff;
+  border-radius: 5px;
+  animation: slideIn 0.3s ease forwards;
+}
+*/
+
+@keyframes slideIn {
+  from {
+    width: 0%;
+    left: 50%;
+  }
+  to {
+    width: 40%;
+    left: 30%;
+  }
+}

@@ -1,0 +1,24 @@
+.categorias-container {
+  max-width: 400px;
+  margin: auto;
+  padding: 1rem;
+  background: rgba(244, 244, 244, 0.6);
+  border-radius: 10px;
+}
+
+.categoria-form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 1rem;
+}
+
+.lista-categorias {
+  list-style: none;
+  padding: 0;
+}
+
+.lista-categorias li {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}

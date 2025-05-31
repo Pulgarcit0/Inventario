@@ -1,0 +1,73 @@
+<div class="ventas-container">
+  <h2>💰 Registrar Venta</h2>
+
+  <form (ngSubmit)="registrarVenta()" class="venta-form">
+    <div class="form-group">
+      <label for="producto">Producto:</label>
+      <select
+        id="producto"
+        [(ngModel)]="productoSeleccionado"
+        name="producto"
+        required
+        [disabled]="cargando"
+      >
+        <option value="" disabled>Selecciona un producto</option>
+        <option *ngFor="let p of productos$ | async" [value]="p.id">
+          {{ p.nombre }} - ${{ p.precio | number:'1.2-2' }} (Stock: {{ p.stock }})
+        </option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="cantidad">Cantidad:</label>
+      <input
+        id="cantidad"
+        type="number"
+        [(ngModel)]="cantidad"
+        name="cantidad"
+        min="1"
+        required
+        [disabled]="cargando"
+      />
+    </div>
+
+    <button type="submit" [disabled]="cargando" class="btn-registrar">
+      {{ cargando ? 'Procesando...' : 'Registrar Venta' }}
+    </button>
+  </form>
+
+  <div *ngIf="mensaje" class="mensaje" [class.error]="mensaje.includes('❌') || mensaje.includes('⚠️')">
+    {{ mensaje }}
+  </div>
+
+  <div class="historial-ventas">
+    <h3>📋 Historial de Ventas Recientes</h3>
+    <div *ngIf="ventas$ | async as ventas">
+      <div *ngIf="ventas.length === 0" class="empty-state">
+        No hay ventas registradas
+      </div>
+
+      <table *ngIf="ventas.length > 0">
+        <thead>
+        <tr>
+          <th>Producto</th>
+          <th>Cantidad</th>
+          <th>Precio Unitario</th>
+          <th>Total</th>
+          <th>Fecha</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let v of ventas">
+          <td>{{ v.productoNombre }}</td>
+          <td>{{ v.cantidad }}</td>
+          <td>${{ v.precioUnitario | number:'1.2-2' }}</td>
+          <td>${{ v.total | number:'1.2-2' }}</td>
+          <td>{{ v.fecha | date:'short' }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>

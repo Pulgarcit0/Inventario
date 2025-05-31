@@ -1,0 +1,90 @@
+<div class="productos-container">
+  <h2>📦 Gestión de Productos</h2>
+
+  <!-- Formulario para agregar productos -->
+  <form class="producto-form" (ngSubmit)="guardarProducto(productoForm)" #productoForm="ngForm">
+    <div class="form-group">
+      <label for="nombre">Nombre del Producto</label>
+      <input id="nombre" [(ngModel)]="nuevo.nombre" name="nombre" placeholder="Ej: Laptop HP 15" required
+             [class.invalid]="productoForm.submitted && !nuevo.nombre" />
+      <small class="error-msg" *ngIf="productoForm.submitted && !nuevo.nombre">
+        El nombre es requerido
+      </small>
+    </div>
+
+    <div class="form-group">
+      <label for="precio">Precio (USD)</label>
+      <input id="precio" [(ngModel)]="nuevo.precio" name="precio" placeholder="Ej: 499.99" required
+             type="number" min="0.01" step="0.01"
+             [class.invalid]="productoForm.submitted && (nuevo.precio <= 0 || !nuevo.precio)" />
+      <small class="error-msg" *ngIf="productoForm.submitted && (nuevo.precio <= 0 || !nuevo.precio)">
+        El precio debe ser mayor a 0
+      </small>
+    </div>
+
+    <div class="form-group">
+      <label for="stock">Cantidad en Stock</label>
+      <input id="stock" [(ngModel)]="nuevo.stock" name="stock" placeholder="Ej: 50" required
+             type="number" min="0"
+             [class.invalid]="productoForm.submitted && (nuevo.stock < 0 || nuevo.stock === null)" />
+      <small class="error-msg" *ngIf="productoForm.submitted && (nuevo.stock < 0 || nuevo.stock === null)">
+        El stock no puede ser negativo
+      </small>
+    </div>
+
+    <button type="submit" class="btn-primary">➕ Agregar Producto</button>
+  </form>
+
+  <!-- Lista de productos -->
+  <div class="productos-list" *ngIf="productos | async as productList">
+    <div *ngIf="productList.length === 0" class="empty-state">
+      No hay productos registrados. ¡Agrega tu primer producto!
+    </div>
+
+    <ul *ngIf="productList.length > 0">
+      <li *ngFor="let p of productList" [class.editing]="editandoId === p.id">
+        <div *ngIf="editandoId !== p.id" class="producto-item">
+          <div class="producto-info">
+            <span class="nombre">{{ p.nombre }}</span>
+            <span class="precio">{{ p.precio | currency:'USD':'symbol':'1.2-2' }}</span>
+            <span class="stock" [class.low-stock]="p.stock <= 5">
+              Stock: {{ p.stock }} {{ p.stock <= 5 ? '⚠️' : '' }}
+            </span>
+          </div>
+          <div class="producto-actions">
+            <button (click)="editarProducto(p)" class="btn-edit">✏️ Editar</button>
+            <button (click)="confirmarEliminar(p.id, p.nombre)" class="btn-delete">🗑️ Eliminar</button>
+          </div>
+        </div>
+
+        <!-- Formulario de edición -->
+        <form *ngIf="editandoId === p.id" class="editar-form" (ngSubmit)="guardarEdicion(editarForm)" #editarForm="ngForm">
+          <div class="form-group">
+            <input [(ngModel)]="editando.nombre" name="editNombre" placeholder="Nombre" required />
+          </div>
+          <div class="form-group">
+            <input [(ngModel)]="editando.precio" name="editPrecio" type="number" min="0.01" step="0.01" placeholder="Precio" required />
+          </div>
+          <div class="form-group">
+            <input [(ngModel)]="editando.stock" name="editStock" type="number" min="0" placeholder="Stock" required />
+          </div>
+          <div class="editar-actions">
+            <button type="submit" class="btn-save">💾 Guardar</button>
+            <button type="button" (click)="cancelarEdicion()" class="btn-cancel">❌ Cancelar</button>
+          </div>
+        </form>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Modal de confirmación -->
+  <div *ngIf="mostrarConfirmacion" class="confirmation-modal">
+    <div class="modal-content">
+      <p>¿Estás seguro de eliminar el producto "{{ productoAEliminarNombre }}"?</p>
+      <div class="modal-actions">
+        <button (click)="eliminarProducto()" class="btn-confirm">✅ Sí, eliminar</button>
+        <button (click)="mostrarConfirmacion = false" class="btn-cancel">❌ Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
